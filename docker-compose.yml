@@ -1,0 +1,21 @@
+version: '2'
+services:
+  redis:
+    image: redis
+    volumes:
+    - redis-data:/data
+  item-master:
+    image: pinnapong/item-master:1.0
+    environment:
+      REDIS_HOST: redis
+  inventory:
+    image: pinnapong/inventory:1.0
+  public-api:
+    image: pinnapong/public-api:1.0
+    environment:
+      INVENTORY_ENDPOINT: http://inventory:8000/inventory
+      ITEM_MASTER_ENDPOINT: http://item-master:8000/items
+    ports:
+    - "3000:3000"
+volumes:
+  redis-data: {}
